@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Teste</title>
+  </head>
+  <body>
+    <label>Numero de times: </label>
+    <input
+      type="number"
+      name="quantity"
+      min="1"
+      max="5"
+      id="quantidadeTimes"
+      value="2"
+    />
+  </br>
+  <label>Numero de Jogadores: </label>
+    <input
+      type="number"
+      name="quantity"
+      min="1"
+      max="50"
+      id="quantidadeJogadores"
+      value="5"
+    />
+
+    <button id="montarTimes">MONTAR</button>
+      </br>
+      </br>
+    <div id="timesSeremMontados"></div>
+      </br>
+    <button id="escolherTime">DISTRIBUIR JOGADORES</button>
+      </br>
+      </br>
+    <div id="corEscolhida"></div>
+    </br>
+    <div id="quantidadeJogadoresNoTime"></div>
+
+    <div id="fim">
+
+    </div>
+    <script>
+      document.getElementById("montarTimes").addEventListener("click", montarTimes);
+      document.getElementById("escolherTime").addEventListener("click", escolheTime);
+
+      let times = {};
+
+      let coresTimes = ["AZUL", "VERMELHO", "VERDE", "PRETO", "BRANCO", "LARANJA", "CINZA", "ROXO", "AMARELO", "ROSA"]
+
+      let cores = Object.keys(times);
+      let quantidadeJogadores = 0;
+      let quantidadeTimes = 0;
+      let size = Object.keys(times).length;
+      let corSorteada = Math.floor(Math.random() * size);
+      let quantidadeJogadoresPorTime = 0;
+      let jogadoresTimes = '';
+
+      function montarTimes(){
+        quantidadeJogadores = document.getElementById("quantidadeJogadores").value;
+        quantidadeTimes = document.getElementById("quantidadeTimes").value;
+        quantidadeJogadoresPorTime = Math.floor(quantidadeJogadores/quantidadeTimes);
+        
+        let nomeTimesMostrar = "<label>SERAO "+quantidadeJogadoresPorTime+
+        " JOGADORES POR TIME<\/label><\/br><\/br><label>TIMES:<\/label><\/br>";
+
+        for(let i = 0; i < quantidadeTimes; i++){
+          times[coresTimes[i]] = quantidadeJogadoresPorTime;
+          nomeTimesMostrar += coresTimes[i] + '<\/br>';
+        }
+        for(let i in times){
+          jogadoresTimes += 
+          "<div id='"+i+"' >" 
+          + i + " : " + (times[i] - quantidadeJogadoresPorTime) 
+          + "<\/div>"; 
+        }
+        
+        console.log(times);
+        document.getElementById("timesSeremMontados").innerHTML = nomeTimesMostrar;
+        document.getElementById("quantidadeJogadoresNoTime").innerHTML = "";
+        document.getElementById("quantidadeJogadoresNoTime").innerHTML = jogadoresTimes;
+        jogadoresTimes = "";
+      }
+
+      function escolheTime() {
+        cores = Object.keys(times);
+        quantidadeTimes = document.getElementById("quantidadeTimes").value;
+        size = Object.keys(times).length;
+        corSorteada = Math.floor(Math.random() * size);
+
+        if(size > 0) {
+          if(times[cores[corSorteada]] > 0 ){
+            times[cores[corSorteada]] -= 1
+          }
+          console.log(times)
+
+          for(let i in times){
+            document.getElementById(i).innerHTML = i + " : " + (quantidadeJogadoresPorTime - times[i]);
+          }
+
+          if(times[cores[corSorteada]] === 0){
+            delete times[cores[corSorteada]];          
+          }
+
+          document.getElementById("corEscolhida").innerHTML = cores[corSorteada];
+        } else {
+          document.getElementById("fim").innerHTML = "FIM";
+        }
+      }
+    </script>
+  </body>
+</html>
